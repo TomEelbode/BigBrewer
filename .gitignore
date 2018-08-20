@@ -12,10 +12,11 @@
 !BigBrewer/**
 !templates/**
 !static/**
-
+BigBrewer/__pycache__/**
 
 !requirements.txt
 !.gitignore
 !setup.sh
 !MANIFEST.in
 !BigBrewer.ini
+!wsgi.py
