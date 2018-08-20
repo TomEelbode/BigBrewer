@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Plant{% endblock %}
+
+{% block head %}
+    <link href="{{ url_for('static', filename='bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css') }}"
+          rel="stylesheet">
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col">
+            <div class="col-lg-12 col-md-12">
+                <div class="card m-5">
+                    <div class="card-body">
+                        <h3 class="card-title"><a>Add your plant here</a></h3>
+                        <form class="p-5" method="post" id="form_register">
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-tag prefix grey-text"></i>
+                                <label for="plantname">Plantname</label>
+                                <input class="form-action" type="text" name="plantname" id="plantname" required autofocus>
+
+                            </div>
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-id-badge prefix grey-text"></i>
+                                <label for="dev_id">Device id</label>
+                                <input type="text" class="form-action" name="dev_id" id="dev_id" required>
+
+                            </div>
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-map-marker prefix grey-text"></i>
+                                <label for="location">Location</label>
+                                <input type="text" class="form-action" name="location" id="location" required>
+
+                            </div>
+
+                            <div id="cp_container" class="md-form form-sm colorpicker-component">
+                                <i class="fa fa-tint prefix grey-text"></i>
+                                <label for="color">Color</label>
+                                <input type="text" class="form-action input-group-lg input-group-addon" name="color"
+                                       id="color"
+                                       required>
+                            </div>
+
+                            <div class="text-center">
+                                <button class="btn btn-green" type="submit" value="Register">
+                                    Send <i class="fa fa-paper-plane-o ml-2"></i></button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js') }}"></script>
+    <script>
+        $('#cp_container').colorpicker({
+            color: '#'+Math.floor(Math.random()*16777215).toString(16),
+            useAlpha: false
+        });
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,4 @@
+include nNSplants/schema.sql
+graft NSplants/static
+graft NSplants/templates
+global-exclude *.pyc

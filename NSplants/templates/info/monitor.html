@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% set active_page = "monitor" %}
+
+{% block title %}Monitor{% endblock %}
+
+{% block head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="m-4">
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+
+                <div class="card mb-4">
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 class="card-title"><a>Humidity monitor</a></h4>
+                        <!-- Text -->
+                        <p class="card-text">Here you can monitor the humidity of the plants in the Telemic offices.</p>
+
+                        <canvas id="monitor"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+
+                <div class="card mb-4">
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 class="card-title"><a>Danger Zone!</a></h4>
+                        <!-- Text -->
+                        <p class="card-text">Please water following plants:</p>
+
+                        <ul id="danger" class="list-group list-group-flush">
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+
+
+
+    <!-- SCRIPTS -->
+
+
+    <script type="text/javascript">
+
+        function getData() {
+            $.ajax({
+                url: '{{ url_for('ttn.get_data') }}',
+                type: "get",
+                data: {jsdata: 'data'},
+                success: function (response) {
+                    console.log(response);
+                    var dev_id;
+                    var found;
+                    var danger_list = [];
+                    for (var i = 0; i < response['plants'].length; i++) {
+                        dev_id = response['plants'][i]['dev_id'];
+                        found = false;
+                        chart.data.datasets.forEach(function (dataset) {
+                            if (dataset.identifier == dev_id) {
+                                dataset.data = response['water'][dev_id];
+                                found = true;
+                            }
+                        })
+                        if (!found) {
+                            chart.data.datasets.push({
+                                label: response['plants'][i]['plantname'],
+                                data: response['water'][dev_id],
+                                borderColor: response['plants'][i]['color'],
+                                pointBorderColor: response['plants'][i]['color'],
+                                backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                                identifier: dev_id,
+                            })
+                        }
+                        if (response['plants'][i]['danger_level'] == 1) {
+                            var txt = $("<li class='list-group-item'></li>").text(response['plants'][i]['plantname'] + ' at location: ' + response['plants'][i]['location']);
+                            danger_list.push(txt);
+                        }
+                    }
+                    $('#danger').html(danger_list);
+                    chart.update();
+                },
+                error: function (xhr) {
+                    alert('Failed from timeout');
+                }
+                ,
+                timeout: 5000
+            });
+        }
+
+
+
+        var ctx = document.getElementById('monitor').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            type: 'time',
+                            display: true,
+                            time: {
+                                unit : 'day',
+                                displayFormats: {
+                                    day: 'MMM, ddd D'
+                                }
+                            }
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            ticks: {
+                                callback: function (value) {
+                                    {#return value + '%';#}
+                                    return value;
+                                },
+                                suggestedMin: 0,
+                                // suggestedMax: 50,
+                                beginAtZero: true
+                            },
+                            display: true
+                        }
+                    ]
+                }
+            }
+        });
+        getData()
+        setInterval(getData,10000)
+    </script>
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% set active_page = "plants" %}
+
+{% block title %}Plants{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+
+            {% for plant in plants %}
+                <div class="card mt-4 ml-4">
+                    <div class="card-body">
+                        <h5 class="card-header">{{ plant['plantname'] }}</h5>
+                        <table class="table">
+                            <tr>
+                                <td><b>Device ID</b></td>
+                                <td>{{ plant['dev_id'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Location</b></td>
+                                <td>{{ plant['location'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Color</b></td>
+                                <td>{{ plant['color'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Voltage</b></td>
+                                <td>{{ voltages[plant['dev_id']] }}</td>
+                            </tr>
+                        </table>
+                        <form method="post">
+                            <div class="form-group text-center">
+                                <input type=hidden value="{{ plant['dev_id'] }}" name="dev_id"/>
+                                <button type="submit" class="btn btn-green" value='reset' name="action">Reset</button>
+                            </div>
+                        </form>
+                        <form method="post">
+                            <div class="form-group text-center">
+                                <input type=hidden value="{{ plant['dev_id'] }}" name="dev_id"/>
+                                <button type="submit" class="btn btn-green" value='delete' name="action">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+

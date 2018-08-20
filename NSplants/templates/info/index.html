@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% set active_page = "home" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+        <div class="view w-100" style="height:540px;">
+            <img src="https://i.pinimg.com/originals/47/65/4d/47654da07ae614c6e2ae899193e0daf3.jpg" class="img-fluid"
+                 alt="">
+            <div class="mask flex-center rgba-stylish-strong">
+                <div class="container text-center">
+                    <h2 class="mb-4 font-weight-bold white-text">Plants of Telemic!</h2>
+                    <p class="white-text">Hello, welcome and meet the plants of Telemic.
+                        All accross our offices plants are equiped with LoRa nodes.
+                        These nodes use a humidity sensor to monitor the water level of the plant.
+                        this way we can keep our plants watered and healthy!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+
+
+            <!-- Section 1 -->
+            <section id="meet-plants" class="text-center">
+
+                <!-- Grid -->
+
+                <br>
+                <br><br><br>
+
+                <div class="row d-flex justify-content-center mb-4">
+
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ url_for('info.monitor') }}">
+                            <i class="fa fa-area-chart fa-4x green-text"> </i>
+                            <h4 class="my-4 font-weight-bold black-text">Monitor</h4>
+                            <p class="grey-text">Monitor the humidity of the plants in the telemic offices.</p>
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ url_for('info.plants') }}">
+                        <i class="fa fa-leaf fa-4x green-text"></i>
+                        <h4 class="my-4 font-weight-bold black-text">Plants</h4>
+                        <p class="grey-text">Discover all the plants!</p>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4 mb-4" >
+                        <a href="{{ url_for('ttn.register') }}">
+                            <i class="fa fa-plus fa-4x green-text"></i>
+                            <h4 class="my-4 font-weight-bold black-text">Add a plant</h4>
+                            <p class="grey-text">Do you have a plant in your office that isn't monitored yet? Let's add it
+                                to the system!</p>
+                        </a>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Section 1 -->
+
+{#            <hr class="my-5">#}
+
+{#            <!-- Section 2 -->#}
+{#            <section id="name-plants" class="text-center">#}
+{##}
+{#                <!-- Grid -->#}
+{#                <div class="row">#}
+{##}
+{#                    <div class="col-lg-4 col-md-12 mb-4">#}
+{##}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <a href="../../../webUI/index_1.html">#}
+{#                                <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                                </div>#}
+{#                            </a>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-lg-4 col-md-6 mb-4">#}
+{##}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-lg-4 col-md-6 mb-4">#}
+{##}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{##}
+{#                <div class="row">#}
+{##}
+{#                    <div class="col-lg-4 col-md-12 mb-4">#}
+{##}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-lg-4 col-md-6 mb-4">#}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-lg-4 col-md-6 mb-4">#}
+{##}
+{#                        <div class="view overlay z-depth-1-half">#}
+{#                            <img src="https://static.webshopapp.com/shops/059449/files/181981376/combi-pakket-4-hippe-groene-kamerplanten.jpg"#}
+{#                                 class="img-fluid" alt="">#}
+{#                            <div class="mask waves-effect waves-light rgba-white-strong">#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <h4 class="my-4 font-weight-bold">Kamerplant</h4>#}
+{#                        <p class="grey-text">Zo ziet een kamerplant eruit!</p>#}
+{##}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{##}
+{#                <!-- Grid -->#}
+{#            </section>#}
+{#            <!-- Section 2 -->#}
+
+{#            <hr class="my-5">#}
+
+            <!-- Section 3 -->
+{#            <section id="register-plants">#}
+{##}
+{#                <h2 class="mb-5 font-weight-bold text-center">Register your plant</h2>#}
+{##}
+{#                <div class="row">#}
+{#                    <div class="col-md-12 text-center">#}
+{#                        <p>Do you have a plant at telemic that isn't in out database yet? Click the button below to#}
+{#                            register your plant!</p>#}
+{#                        <a class="btn btn-green" href="{{ url_for('ttn.register') }}">Register</a>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </section>#}
+            <!-- Section 3 -->
+
+        </div>
+
+
+{% endblock %}
+
