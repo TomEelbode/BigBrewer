@@ -2,8 +2,7 @@
 
 {% set navigation_bar = [
     (url_for('info.index'), 'home', 'Home'),
-    (url_for('info.monitor'), 'monitor', 'Monitor'),
-    (url_for('info.plants'), 'plants', 'Plants'),
+    (url_for('info.monitor'), 'monitor', 'Monitor')
 ] -%}
 
 <title>{% block title %}{% endblock %} - Big Brewer</title>
@@ -27,11 +26,11 @@
 <header>
 
     <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-light white fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark amber fixed-top">
         <div class="container-fluid">
             <!-- Navbar brand -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="{{ url_for('info.index') }}">Telemic Plants</a>
+                <a class="navbar-brand" href="{{ url_for('info.index') }}">Big Brewer</a>
             </div>
             <!-- Collapse button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
