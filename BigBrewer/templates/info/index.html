@@ -6,16 +6,15 @@
 {% block content %}
 
 
-        <div class="view w-100" style="height:540px;">
-            <img src="https://i.pinimg.com/originals/47/65/4d/47654da07ae614c6e2ae899193e0daf3.jpg" class="img-fluid"
+        <div class="view" style="height:540px;">
+            <img class="img-responsive" src="https://www.skwachtebeke.be/sites/default/files/2016-09/banner-2_0.jpg" class="img-fluid"
                  alt="">
-            <div class="mask flex-center rgba-stylish-strong">
+            <div class="mask flex-center rgba-stylish-light">
                 <div class="container text-center">
-                    <h2 class="mb-4 font-weight-bold white-text">Plants of Telemic!</h2>
-                    <p class="white-text">Hello, welcome and meet the plants of Telemic.
-                        All accross our offices plants are equiped with LoRa nodes.
-                        These nodes use a humidity sensor to monitor the water level of the plant.
-                        this way we can keep our plants watered and healthy!
+                    <h2 class="mb-4 font-weight-bold white-text">Flamoes from persones difficiles!</h2>
+                    <p class="white-text">Hello, welcome and meet the famous Flamoes from persones difficiles.
+                        Every time we brew beer, the temperature during mashing and cooking is logged for
+                        better control and safety. You can monitor this live via this site.
                     </p>
                 </div>
             </div>
@@ -26,7 +25,7 @@
 
 
             <!-- Section 1 -->
-            <section id="meet-plants" class="text-center">
+            <section id="meet-temperatureloggers" class="text-center">
 
                 <!-- Grid -->
 
@@ -39,27 +38,27 @@
                         <a href="{{ url_for('info.monitor') }}">
                             <i class="fa fa-area-chart fa-4x green-text"> </i>
                             <h4 class="my-4 font-weight-bold black-text">Monitor</h4>
-                            <p class="grey-text">Monitor the humidity of the plants in the telemic offices.</p>
+                            <p class="grey-text">Monitor the temperature of our beers.</p>
                         </a>
 
                     </div>
 
                     <div class="col-md-4 mb-4">
-                        <a href="{{ url_for('info.plants') }}">
+                        <a href="https://www.youporn.com/watch/11696813/sex-met-tine/">
                         <i class="fa fa-leaf fa-4x green-text"></i>
-                        <h4 class="my-4 font-weight-bold black-text">Plants</h4>
-                        <p class="grey-text">Discover all the plants!</p>
+                        <h4 class="my-4 font-weight-bold black-text">FUN</h4>
+                        <p class="grey-text">Fun page!</p>
                         </a>
                     </div>
 
-                    <div class="col-md-4 mb-4" >
+{#                     <div class="col-md-4 mb-4" >
                         <a href="{{ url_for('ttn.register') }}">
                             <i class="fa fa-plus fa-4x green-text"></i>
                             <h4 class="my-4 font-weight-bold black-text">Add a plant</h4>
                             <p class="grey-text">Do you have a plant in your office that isn't monitored yet? Let's add it
                                 to the system!</p>
                         </a>
-                    </div>
+                    </div> #}
 
                 </div>
 
