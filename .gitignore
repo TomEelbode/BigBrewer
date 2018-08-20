@@ -1,15 +1,15 @@
 # Ignore everything
 *
 
-# But descend into directories 
+# But descend into directories
 !*/
- 
-# Recursively allow files under subtree 
-#!/subtree/** 
-# You can be specific with these rules 
-#!/some/other/deep/path/** 
 
-!NSplants/**
+# Recursively allow files under subtree
+#!/subtree/**
+# You can be specific with these rules
+#!/some/other/deep/path/**
+
+!BigBrewer/**
 !templates/**
 !static/**
 
@@ -18,4 +18,4 @@
 !.gitignore
 !setup.sh
 !MANIFEST.in
-!NSplants.ini   
+!BigBrewer.ini

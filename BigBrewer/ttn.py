@@ -6,7 +6,7 @@ from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
 
-from NSplants.db import get_db
+from BigBrewer.db import get_db
 
 bp = Blueprint('ttn', __name__, url_prefix='/ttn')
 

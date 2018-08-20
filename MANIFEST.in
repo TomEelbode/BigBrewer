@@ -1,4 +1,4 @@
-include nNSplants/schema.sql
-graft NSplants/static
-graft NSplants/templates
+include nBigBrewer/schema.sql
+graft BigBrewer/static
+graft BigBrewer/templates
 global-exclude *.pyc

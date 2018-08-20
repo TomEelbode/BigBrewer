@@ -9,7 +9,7 @@ pip install -r requirements.txt
 echo "Setting up database"
 export FLASK_ENV=development
 export FLASK_DEBUG=true
-export FLASK_APP=NSplants
+export FLASK_APP=BigBrewer
 flask init-db
 
 echo "Setting up git"

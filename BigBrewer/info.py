@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash, render_template, request, current_app
 )
 
-from NSplants.db import get_db
+from BigBrewer.db import get_db
 from flask_login import current_user
 
 bp = Blueprint('info', __name__)
