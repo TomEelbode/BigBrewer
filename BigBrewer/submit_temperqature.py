@@ -51,7 +51,7 @@ def submit():
 
     return request.query_string
 
-
+################## TODO alter the rest of this file
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
