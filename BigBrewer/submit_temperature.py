@@ -8,10 +8,10 @@ from flask import (
 
 from BigBrewer.db import get_db
 
-bp = Blueprint('temp', __name__, url_prefix='/temp')
+bp = Blueprint('temperature', __name__, url_prefix='/temperature')
 
 
-# curl --header "Content-Type: application/json" --request POST --data '{"metadata": {"time": "2018-05-29T11:25:11.875464918Z"}, "app_id": "bigbrewer", "dev_id": "tempsen1", "payload_fields": {"voltage": 26.214, "temperature": 6710886}}' 127.0.0.1:5000/ttn/submit
+# curl --header "Content-Type: application/json" --request POST --data '{"metadata": {"time": "2018-05-29T11:25:11.875464918Z"}, "app_id": "bigbrewer", "dev_id": "tempsen1", "payload_fields": {"voltage": 26.214, "temperature": 6710886}}' 192.168.0.174:5000/ttn/submit
 
 @bp.route('/submit', methods=['POST'])
 def submit():
@@ -43,7 +43,7 @@ def submit():
         if error is None:
             db.execute(
                 'INSERT INTO status (sensor_id, temperature, voltage, date_tx)  VALUES (?, ?, ?, ?)',
-                (plant_id[0], water, voltage, date)
+                (plant_id[0], temperature, voltage, date)
             )
             db.commit()
         else:
@@ -55,21 +55,15 @@ def submit():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        plantname = request.form['plantname']
+        sensorname = request.form['sensorname']
         dev_id = request.form['dev_id']
-        location = request.form['location']
-        color = request.form['color']
         db = get_db()
         error = None
 
-        if not plantname:
-            error = 'Plantname is required.'
+        if not sensorname:
+            error = 'Sensorname is required.'
         elif not dev_id:
             error = 'Device_id is required.'
-        elif not location:
-            error = 'Location is required.'
-        elif not color:
-            error = 'Color is required.'
         elif db.execute(
                 'SELECT id FROM plant WHERE dev_id = ?', (dev_id,)
         ).fetchone() is not None:
@@ -81,8 +75,8 @@ def register():
 
         if error is None:
             db.execute(
-                'INSERT INTO plant (dev_id, plantname, location, color) VALUES (?, ?, ?, ?)',
-                (dev_id, plantname, location, color)
+                'INSERT INTO sensor (dev_id, sensorname) VALUES (?, ?)',
+                (dev_id, sensorname)
             )
             db.commit()
             return redirect(url_for('info.index'))
@@ -90,7 +84,7 @@ def register():
         flash(error)
         current_app.logger.warning(error)
 
-    return render_template('ttn/register.html')
+    return render_template('temperature/register.html')
 
 
 @bp.route('/data', methods=['GET'])
@@ -98,40 +92,37 @@ def get_data():
     db = get_db()
     c = db.cursor()
     plants = c.execute(
-        'SELECT plantname, dev_id, color, location'
-        ' FROM plant'
+        'SELECT sensorname, dev_id'
+        ' FROM sensor'
     ).fetchall()
 
-    plants = [dict(zip([key[0] for key in c.description], row)) for row in plants]
+    sensors = [dict(zip([key[0] for key in c.description], row)) for row in sensors]
 
     today = date.today()
     last_n_days = 7
     day_offset = today - timedelta(days=last_n_days)
     month_ago = today - timedelta(days=31)
-    water = dict()
-    for plant in plants:
-        max_water = c.execute(
-            'SELECT MAX(water)'
-            ' FROM status s JOIN plant p on s.plant_id = p.id'
-            ' WHERE dev_id = ? AND date_tx >= ?', (plant['dev_id'], month_ago,)
+    temperature = dict()
+    for sensor in sensors:
+        max_temperature = c.execute(
+            'SELECT MAX(temperature)'
+            ' FROM status s JOIN sensor p on s.sensor_id = p.id'
+            ' WHERE dev_id = ? AND date_tx >= ?', (sensor['dev_id'], month_ago,)
         ).fetchone()
 
-        if max_water is None:
-            max_water = 1
+        if max_temperature is None:
+            max_temperature = 1
         else:
-            max_water = max_water['MAX(water)']
+            max_temperature = max_temperature['MAX(temperature)']
 
         results = c.execute(
-            'SELECT water, date_tx'
-            ' FROM status s JOIN plant p on s.plant_id = p.id'
+            'SELECT temperature, date_tx'
+            ' FROM status s JOIN sensor p on s.sensor_id = p.id'
             ' WHERE dev_id = ? AND date_tx >= ?'
-            ' ORDER BY date_tx ASC', (plant['dev_id'], day_offset,)).fetchall()
-        water[plant['dev_id']] = [dict([('x', (
+            ' ORDER BY date_tx ASC', (sensor['dev_id'], day_offset,)).fetchall()
+        temperature[sensor['dev_id']] = [dict([('x', (
                 datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(
-            '%Y-%m-%d %H:%M:%S')), ('y', round(row['water'] / max_water * 100,2))]) for row in results]
-        if len(water[plant['dev_id']]) > 0 and water[plant['dev_id']][-1]['y'] < 20:
-            plant['danger_level'] = 1
-        else:
-            plant['danger_level'] = 0
+            '%Y-%m-%d %H:%M:%S')), ('y', round(row['temperature'] / max_temperature * 100,2))]) for row in results]
+        
 
-    return jsonify(water=water, plants=plants)
+    return jsonify(temperature=temperature, sensors=sensors)

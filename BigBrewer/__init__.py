@@ -45,8 +45,8 @@ def create_app(test_config=None):
     from BigBrewer import db
     db.init_app(app)
 
-    from BigBrewer import auth, info, ttn
-    app.register_blueprint(ttn.bp)
+    from BigBrewer import auth, info, submit_temperature
+    app.register_blueprint(temperature.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(info.bp)
     app.add_url_rule('/', endpoint='index')
