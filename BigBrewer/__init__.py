@@ -45,7 +45,7 @@ def create_app(test_config=None):
     from BigBrewer import db
     db.init_app(app)
 
-    from BigBrewer import auth, info, submit_temperature
+    from BigBrewer import auth, info, temperature
     app.register_blueprint(temperature.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(info.bp)
