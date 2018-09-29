@@ -91,7 +91,7 @@ def register():
 def get_data():
     db = get_db()
     c = db.cursor()
-    plants = c.execute(
+    sensors = c.execute(
         'SELECT sensorname, dev_id'
         ' FROM sensor'
     ).fetchall()
