@@ -42,8 +42,9 @@ def submit():
 
         if error is None:
             db.execute(
-                'INSERT INTO status (sensor_id, temperature, voltage, date_tx)  VALUES (?, ?, ?, ?)',
-                (plant_id[0], temperature, voltage, date)
+                'INSERT INTO status(sensor_id, temperature, voltage, date_tx) \
+                VALUES(?, ?, ?, ?)',
+                (sensor_id[0], temperature, voltage, date)
             )
             db.commit()
         else:
@@ -51,7 +52,7 @@ def submit():
 
     return request.query_string
 
-################## TODO alter the rest of this file
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -95,7 +96,6 @@ def get_data():
         'SELECT sensorname, dev_id'
         ' FROM sensor'
     ).fetchall()
-
     sensors = [dict(zip([key[0] for key in c.description], row)) for row in sensors]
 
     today = date.today()
@@ -122,7 +122,7 @@ def get_data():
             ' ORDER BY date_tx ASC', (sensor['dev_id'], day_offset,)).fetchall()
         temperature[sensor['dev_id']] = [dict([('x', (
                 datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(
-            '%Y-%m-%d %H:%M:%S')), ('y', round(row['temperature'] / max_temperature * 100,2))]) for row in results]
-        
+            '%Y-%m-%d %H:%M:%S')), ('y', row['temperature'])]) for row in results]
+
 
     return jsonify(temperature=temperature, sensors=sensors)
