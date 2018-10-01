@@ -18,7 +18,7 @@ def submit():
     if request.method == 'POST':
         current_app.logger.info(request.get_json())
         data = request.get_json()
-
+        # print(data)
         metadata = data["metadata"]
         date = pd.to_datetime(metadata['time']).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -26,6 +26,7 @@ def submit():
 
         payload = data['payload_fields']
         temperature = payload['temperature']
+        # print(temperature)
         voltage = payload['voltage']
         db = get_db()
         error = None
@@ -66,13 +67,9 @@ def register():
         elif not dev_id:
             error = 'Device_id is required.'
         elif db.execute(
-                'SELECT id FROM plant WHERE dev_id = ?', (dev_id,)
+                'SELECT id FROM sensor WHERE dev_id = ?', (dev_id,)
         ).fetchone() is not None:
             error = 'Device {} already exists.'.format(dev_id)
-        elif db.execute(
-                'SELECT id FROM plant WHERE color = ?', (color,)
-        ).fetchone() is not None:
-            error = 'Color {} is already in use.'.format(color)
 
         if error is None:
             db.execute(
@@ -118,11 +115,11 @@ def get_data():
         results = c.execute(
             'SELECT temperature, date_tx'
             ' FROM status s JOIN sensor p on s.sensor_id = p.id'
-            ' WHERE dev_id = ? AND date_tx >= ?'
-            ' ORDER BY date_tx ASC', (sensor['dev_id'], day_offset,)).fetchall()
+            ' WHERE dev_id = ?'
+            ' ORDER BY date_tx ASC', (sensor['dev_id'],)).fetchall()
+        # print(results)
         temperature[sensor['dev_id']] = [dict([('x', (
                 datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(
             '%Y-%m-%d %H:%M:%S')), ('y', row['temperature'])]) for row in results]
-
 
     return jsonify(temperature=temperature, sensors=sensors)
