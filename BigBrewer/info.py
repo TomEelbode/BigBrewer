@@ -26,14 +26,14 @@ def monitor():
 #             if current_user.is_authenticated:
 #                 dev_id = request.form['dev_id']
 #                 error = None
-#
+
 #                 if not dev_id:
 #                     error = 'Something went wrong.'
 #                 elif db.execute(
 #                         'SELECT id FROM plant WHERE dev_id = ?', (dev_id,)
 #                 ).fetchone() is None:
 #                     error = 'Device {} does not exist, something went wrong.'.format(dev_id)
-#
+
 #                 if error is None:
 #                     db.execute(
 #                         'DELETE FROM plant WHERE dev_id = ?',
@@ -45,18 +45,18 @@ def monitor():
 #                     current_app.logger.warning(error)
 #             else:
 #                 flash('You need to log in to perform this action')
-#
+
 #         elif request.form['action'] == 'reset':
 #             if current_user.is_authenticated:
 #                 dev_id = request.form['dev_id']
 #                 error = None
-#
+
 #                 if not dev_id:
 #                     error = 'Something went wrong.'
 #                 result = db.execute('SELECT id FROM plant WHERE dev_id = ?', (dev_id,)).fetchone()
 #                 if result is None:
 #                     error = 'Device {} does not exist, something went wrong.'.format(dev_id)
-#
+
 #                 if error is None:
 #                     db.execute(
 #                         'DELETE FROM status WHERE plant_id = ?',
@@ -68,7 +68,7 @@ def monitor():
 #                     current_app.logger.warning(error)
 #             else:
 #                 flash('You need to log in to perform this action')
-#
+
 #     plants = db.execute(
 #         'SELECT id, plantname, dev_id, color, location'
 #         ' FROM plant'
@@ -92,5 +92,5 @@ def monitor():
 #             voltages[plant['dev_id']] = 0
 #         else:
 #             voltages[plant['dev_id']] = result['voltage']
-#
+
 #     return render_template('info/plants.html', plants=plants, voltages=voltages)

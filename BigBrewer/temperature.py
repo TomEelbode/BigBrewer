@@ -86,12 +86,18 @@ def register():
 
 
 @bp.route('/createsession', methods=['GET', 'POST'])
-def register():
+def createsession():
     if request.method == 'POST':
+        print("CREATING NEW SESSION!")
+        print(request.form)
         sessionname = request.form['session_name']
+        print(sessionname)
         dev_id = request.form['session_sensor']
+        print(dev_id)
         type = request.form['session_type']
+        print(type)
         color = request.form['color']
+        print(color)
         db = get_db()
         error = None
 
@@ -117,8 +123,14 @@ def register():
 
         flash(error)
         current_app.logger.warning(error)
-
-    return render_template('temperature/session.html')
+    if request.method == 'GET':
+        db = get_db()
+        sensors = db.execute(
+                'SELECT dev_id'
+                ' FROM sensor'
+                ' ORDER BY dev_id DESC'
+                ).fetchall()
+    return render_template('temperature/session.html', sensors=sensors)
 
 
 @bp.route('/data', methods=['GET'])
@@ -132,21 +144,21 @@ def get_data():
     sensors = [dict(zip([key[0] for key in c.description], row)) for row in sensors]
 
     today = date.today()
-    last_n_days = 31
+    last_n_days = 7
     day_offset = today - timedelta(days=last_n_days)
-    month_ago = today - timedelta(days=31)
+    # month_ago = today - timedelta(days=31)
     temperature = dict()
     for sensor in sensors:
-        max_temperature = c.execute(
-            'SELECT MAX(temperature)'
-            ' FROM status s JOIN sensor p on s.sensor_id = p.id'
-            ' WHERE dev_id = ? AND date_tx >= ?', (sensor['dev_id'], month_ago,)
-        ).fetchone()
+        # max_temperature = c.execute(
+        #     'SELECT MAX(temperature)'
+        #     ' FROM status s JOIN sensor p on s.sensor_id = p.id'
+        #     ' WHERE dev_id = ? AND date_tx >= ?', (sensor['dev_id'], month_ago,)
+        # ).fetchone()
 
-        if max_temperature is None:
-            max_temperature = 1
-        else:
-            max_temperature = max_temperature['MAX(temperature)']
+        # if max_temperature is None:
+        #     max_temperature = 1
+        # else:
+        #     max_temperature = max_temperature['MAX(temperature)']
 
         results = c.execute(
             'SELECT temperature, date_tx'

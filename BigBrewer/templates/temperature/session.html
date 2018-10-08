@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% set active_page = "createsession" %}
 {% block title %}Create a new session{% endblock %}
 
 {% block head %}
@@ -26,25 +26,24 @@
 
                             </div>
 
-                            <div class="md-form form-sm">
+                            <div class="form-group">
 
                                 <i class="fa fa-id-badge prefix grey-text"></i>
                                 <label for="session_sensor">Add a sensor to the session</label>
-                                <select type="text" class="form-action" name="session_sensor" id="session_sensor" required>
-                                    <option>Mash</option>
-                                    <option>Boil</option>
-                                    <option>Ferment</option>
-                                    <option>Lager</option>
+                                <select class="form-control" name="session_sensor" id="session_sensor" required>
+                                {% for sensor in sensors %}
+                                    <option>{{ sensor['dev_id'] }}</option>
+                                {% endfor %}
 
                                 </select>
 
                             </div>
 
-                            <div class="md-form form-sm">
+                            <div class="form-group">
 
                                 <i class="fa fa-id-badge prefix grey-text"></i>
                                 <label for="session_type">What kind of session do you want to start?</label>
-                                <select type="text" class="form-action" name="session_sensor" id="session_sensor" required>
+                                <select class="form-control" name="session_type" id="session_type" required>
                                     <option>Mash</option>
                                     <option>Boil</option>
                                     <option>Ferment</option>

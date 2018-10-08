@@ -14,7 +14,7 @@ CREATE TABLE status (
 	date_tx DATETIME NOT NULL,
 	temperature FLOAT NOT NULL,
 	voltage FLOAT NOT NULL,
-	FOREIGN KEY (sensor_id) REFERENCES sensor (id) ON DELETE CASCADE,
+	FOREIGN KEY (sensor_id) REFERENCES sensor (id) ON DELETE CASCADE
     -- FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE
 );
 
@@ -24,6 +24,7 @@ CREATE TABLE session (
     begin_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     end_time TIMESTAMP,
     type TEXT NOT NULL,
-    color TEXT NOT NULL,
+    color TEXT,
+    sensor_id INTEGER NOT NULL,
     FOREIGN KEY (sensor_id) REFERENCES sensor (id) ON DELETE CASCADE
 );
