@@ -14,18 +14,26 @@
         <div class="row">
             <div class="col-lg-12 col-md-12">
                 <!-- Title -->
-                <h4 ><a>Temperature monitor</a></h4>
+                <h1 ><a>Temperature monitor</a></h4>
                 <!-- Text -->
                 <p>Here you can monitor the temperature, measured by one of the sensors.</p>
 
-                <canvas id="monitor"></canvas>
 
             </div>
 
-            
+
 
         </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <p>Placeholder for latest temperature dial</p>
+            </div>
+            <div class="col-lg-8 col-md-12">
 
+                    <canvas id="monitor"></canvas>
+
+            </div>
+        </div>
     </div>
     </div>
 
@@ -59,9 +67,9 @@
                             chart.data.datasets.push({
                                 label: response['sensors'][i]['sensorname'],
                                 data: response['temperature'][dev_id],
-                                // borderColor: response['sensors'][i]['color'],
-                                // pointBorderColor: response['sensors'][i]['color'],
-                                backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                                borderColor: '#ffcc00',
+                                pointBorderColor: '#ffcc00',
+                                backgroundColor: '#ffcc0050',
                                 identifier: dev_id,
                             })
                         }
@@ -128,4 +136,3 @@
 
 
 {% endblock %}
-

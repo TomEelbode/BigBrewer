@@ -85,6 +85,42 @@ def register():
     return render_template('temperature/register.html')
 
 
+@bp.route('/createsession', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        sessionname = request.form['session_name']
+        dev_id = request.form['session_sensor']
+        type = request.form['session_type']
+        color = request.form['color']
+        db = get_db()
+        error = None
+
+        if not sessionname:
+            error = 'Session name is required.'
+        elif not dev_id:
+            error = 'Attatched sensor is required.'
+        elif not type:
+            error = 'Define the type of the session.'
+
+        sensor_id = db.execute(
+            'SELECT id FROM sensor WHERE dev_id = ?', (dev_id,)
+        ).fetchone()
+
+        if error is None:
+            db.execute(
+                'INSERT INTO session (session_name, type, color, sensor_id) \
+                VALUES (?, ?, ?, ?)',
+                (sessionname, type, color, sensor_id)
+            )
+            db.commit()
+            return redirect(url_for('info.index'))
+
+        flash(error)
+        current_app.logger.warning(error)
+
+    return render_template('temperature/session.html')
+
+
 @bp.route('/data', methods=['GET'])
 def get_data():
     db = get_db()
@@ -96,7 +132,7 @@ def get_data():
     sensors = [dict(zip([key[0] for key in c.description], row)) for row in sensors]
 
     today = date.today()
-    last_n_days = 7
+    last_n_days = 31
     day_offset = today - timedelta(days=last_n_days)
     month_ago = today - timedelta(days=31)
     temperature = dict()
@@ -115,8 +151,8 @@ def get_data():
         results = c.execute(
             'SELECT temperature, date_tx'
             ' FROM status s JOIN sensor p on s.sensor_id = p.id'
-            ' WHERE dev_id = ?'
-            ' ORDER BY date_tx ASC', (sensor['dev_id'],)).fetchall()
+            ' WHERE dev_id = ? AND date_tx >= ?'
+            ' ORDER BY date_tx ASC', (sensor['dev_id'], day_offset, )).fetchall()
         # print(results)
         temperature[sensor['dev_id']] = [dict([('x', (
                 datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(

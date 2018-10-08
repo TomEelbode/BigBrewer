@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a new session{% endblock %}
+
+{% block head %}
+    <link href="{{ url_for('static', filename='bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css') }}"
+          rel="stylesheet">
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col">
+            <div class="col-lg-12 col-md-12">
+                <div class="card m-5">
+                    <div class="card-body">
+                        <h3 class="card-title"><a>Create a new session here</a></h3>
+                        <form class="p-5" method="post" id="form_register">
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-tag prefix grey-text"></i>
+                                <label for="session_name">Session name</label>
+                                <input class="form-action" type="text" name="session_name" id="session_name" required autofocus>
+
+                            </div>
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-id-badge prefix grey-text"></i>
+                                <label for="session_sensor">Add a sensor to the session</label>
+                                <select type="text" class="form-action" name="session_sensor" id="session_sensor" required>
+                                    <option>Mash</option>
+                                    <option>Boil</option>
+                                    <option>Ferment</option>
+                                    <option>Lager</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="md-form form-sm">
+
+                                <i class="fa fa-id-badge prefix grey-text"></i>
+                                <label for="session_type">What kind of session do you want to start?</label>
+                                <select type="text" class="form-action" name="session_sensor" id="session_sensor" required>
+                                    <option>Mash</option>
+                                    <option>Boil</option>
+                                    <option>Ferment</option>
+                                    <option>Lager</option>
+
+                                </select>
+
+                            </div>
+
+                            <div id="cp_container" class="md-form form-sm colorpicker-component">
+                                <i class="fa fa-tint prefix grey-text"></i>
+                                <label for="color">Pick a color for this session</label>
+                                <input type="text" class="form-action input-group-lg input-group-addon" name="color"
+                                       id="color"
+                                       required>
+                            </div>
+
+                            <div class="text-center">
+                                <button class="btn btn-yellow" type="submit" value="Create">
+                                    Send <i class="fa fa-paper-plane-o ml-2"></i></button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js') }}"></script>
+    <script>
+        $('#cp_container').colorpicker({
+            color: '#'+Math.floor(Math.random()*16777215).toString(16),
+            useAlpha: false
+        });
+    </script>
+
+
+
+{% endblock %}
