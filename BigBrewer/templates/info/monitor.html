@@ -4,157 +4,84 @@
 {% block title %}Monitor{% endblock %}
 
 {% block head %}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <style>
-        .wrapper {
-            display: flex;
-            width: 100%;
-        }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        #sidebar {
-            min-width: 250px;
-            max-width: 250px;
-        }
+    <title>Simple Sidebar - Start Bootstrap Template</title>
 
-        #sidebar.active {
-            margin-left: -250px;
-        }
-        #sidebar {
-            /* don't forget to add all the previously mentioned styles here too */
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            z-index: 999;
-            background: #FFCC0055;
-            color: #fff;
-            transition: all 0.3s;
-        }
-        #sidebar .sidebar-header {
-            padding: 20px;
-            background: #FFCC00;
-        }
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
 
-        #sidebar ul.components {
-            padding: 20px 0;
-            border-bottom: 1px solid #FFCC00;
-        }
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/monitor_new.css') }}" rel="stylesheet">
 
-        #sidebar ul p {
-            color: #fff;
-            padding: 10px;
-        }
-
-        #sidebar ul li a {
-            padding: 10px;
-            font-size: 1.1em;
-            display: block;
-        }
-        #sidebar ul li a:hover {
-            color: #EEBB00;
-            background: #fff;
-        }
-
-        #sidebar ul li.active > a, a[aria-expanded="true"] {
-            color: #fff;
-            background: #FFCC00;
-        }
-        ul ul a {
-            font-size: 0.9em !important;
-            padding-left: 30px !important;
-            background: #FFCC00;
-        }
-    </style>
 
 {% endblock %}
 
 
 {% block content %}
 
+    <div id="wrapper">
 
-    <div class="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <!-- <div class="sidebar-header">
+                    <h3>Session monitor</h3>
+                </div> -->
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Session monitor
+                    </a>
+                </li>
+                {% for session in sessions %}
+                <li>
+                    <a href="#">{{session['session_name']}}</a>
+                </li>
+                {% endfor %}
 
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Header</h3>
-                </div>
-                <ul class="list-unstyled components">
-                    <p>Dummy Heading</p>
-                    <li class="active">
-                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li>
-                                <a href="#">Home 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 3</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">Page 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 3</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                </ul>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
-            </nav>
-
-
-            <div class="m-4 container-fluid" id="content">
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <a href="#menu-toggle" class="btn btn-yellow " id="menu-toggle">Toggle Menu</a>
+                <!-- <h1>Session monitor</h1> -->
                 <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <!-- Title -->
-                        <h1 ><a>Temperature monitor</a></h4>
-                        <!-- Text -->
-                        <p>Here you can monitor the temperature, measured by one of the sensors.</p>
-
-
+                    <div class='col-2'>
+                        <p>Placeholder</p>
                     </div>
-
+                    <div class='col-10'>
+                        <canvas id="monitor"></canvas>
+                    </div>
                 </div>
-                <div class="row">
 
-                    <div class="col-lg-4 col-md-12">
-                        <p>Placeholder for latest temperature dial</p>
-                    </div>
 
-                    <div class="col-lg-8 col-md-12">
-                            <canvas id="monitor"></canvas>
-                    </div>
-
-                </div>
             </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
     </div>
+    <!-- /#wrapper -->
 
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
-
-
-    <!-- SCRIPTS -->
-
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
     <script type="text/javascript">
 
@@ -245,8 +172,5 @@
         getData()
         setInterval(getData,10000)
     </script>
-
-
-
 
 {% endblock %}

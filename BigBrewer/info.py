@@ -15,7 +15,14 @@ def index():
 
 @bp.route('/monitor')
 def monitor():
-    return render_template('info/monitor.html')
+    db = get_db()
+    sessions = db.execute(
+            'SELECT id, session_name, sensor_id, color, begin_time, end_time, type'
+            ' FROM session'
+            ' ORDER BY id DESC'
+        ).fetchall()
+
+    return render_template('info/monitor.html', sessions=sessions)
 
 
 # @bp.route('/plants', methods=['GET', 'POST'])

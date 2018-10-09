@@ -110,13 +110,12 @@ def createsession():
 
         sensor_id = db.execute(
             'SELECT id FROM sensor WHERE dev_id = ?', (dev_id,)
-        ).fetchone()
+        ).fetchone()[0]
 
         if error is None:
             db.execute(
                 'INSERT INTO session (session_name, type, color, sensor_id) \
-                VALUES (?, ?, ?, ?)',
-                (sessionname, type, color, sensor_id)
+                VALUES (?, ?, ?, ?)', (sessionname, type, color, sensor_id)
             )
             db.commit()
             return redirect(url_for('info.index'))
