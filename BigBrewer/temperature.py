@@ -38,14 +38,23 @@ def submit():
         sensor_id = db.execute(
             'SELECT id FROM sensor WHERE dev_id = ?', (dev_id,)
         ).fetchone()
+        session_id = None
         if sensor_id is None:
             error = 'Device {} is not yet registered.'.format(dev_id)
+        else:
+            print("sersor ID:", sensor_id[0])
+            session_id = db.execute(
+                'SELECT id FROM session WHERE sensor_id = ? ORDER BY begin_time DESC',
+                (sensor_id[0],)
+            ).fetchone()
+            if session_id is None:
+                error = 'Device {} is not yet used by any session.'.format(dev_id)
 
         if error is None:
             db.execute(
-                'INSERT INTO status(sensor_id, temperature, voltage, date_tx) \
-                VALUES(?, ?, ?, ?)',
-                (sensor_id[0], temperature, voltage, date)
+                'INSERT INTO status(sensor_id, session_id, temperature, voltage, date_tx)'
+                ' VALUES(?, ?, ?, ?, ?)',
+                (sensor_id[0], session_id[0], temperature, voltage, date)
             )
             db.commit()
         else:
@@ -112,6 +121,24 @@ def createsession():
             'SELECT id FROM sensor WHERE dev_id = ?', (dev_id,)
         ).fetchone()[0]
 
+        # print("sensor ID", sensor_id)
+
+        current_session = db.execute(
+            'SELECT id FROM session WHERE sensor_id = ?'
+            'ORDER BY begin_time DESC', (sensor_id,)
+        ).fetchone()
+
+        if current_session is not None:
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            print("Current session:", current_session[0])
+            print("Current timestamp", timestamp)
+            # type_new = 'test'
+            print("Stopping other session that used the same sensor")
+            db.execute(
+                'UPDATE session SET end_time = ? WHERE id = ?',
+                (timestamp, current_session,)
+            )
+
         if error is None:
             db.execute(
                 'INSERT INTO session (session_name, type, color, sensor_id) \
@@ -136,18 +163,18 @@ def createsession():
 def get_data():
     db = get_db()
     c = db.cursor()
-    sensors = c.execute(
-        'SELECT sensorname, dev_id'
-        ' FROM sensor'
+    sessions = c.execute(
+        'SELECT id, session_name'
+        ' FROM session'
     ).fetchall()
-    sensors = [dict(zip([key[0] for key in c.description], row)) for row in sensors]
+    sessions = [dict(zip([key[0] for key in c.description], row)) for row in sessions]
 
     today = date.today()
     last_n_days = 7
     day_offset = today - timedelta(days=last_n_days)
     # month_ago = today - timedelta(days=31)
     temperature = dict()
-    for sensor in sensors:
+    for session in sessions:
         # max_temperature = c.execute(
         #     'SELECT MAX(temperature)'
         #     ' FROM status s JOIN sensor p on s.sensor_id = p.id'
@@ -161,12 +188,12 @@ def get_data():
 
         results = c.execute(
             'SELECT temperature, date_tx'
-            ' FROM status s JOIN sensor p on s.sensor_id = p.id'
-            ' WHERE dev_id = ? AND date_tx >= ?'
-            ' ORDER BY date_tx ASC', (sensor['dev_id'], day_offset, )).fetchall()
+            ' FROM status s JOIN session p on s.session_id = p.id'
+            ' WHERE session_id = ? AND date_tx >= ?'
+            ' ORDER BY date_tx ASC', (session['id'], day_offset, )).fetchall()
         # print(results)
-        temperature[sensor['dev_id']] = [dict([('x', (
-                datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(
+        temperature[session['id']] = [dict([('x', (
+                datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=0)).strftime(
             '%Y-%m-%d %H:%M:%S')), ('y', row['temperature'])]) for row in results]
 
-    return jsonify(temperature=temperature, sensors=sensors)
+    return jsonify(temperature=temperature, sessions=sessions)

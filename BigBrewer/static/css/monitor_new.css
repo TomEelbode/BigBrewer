@@ -28,7 +28,7 @@ body {
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
-  background: #000;
+  background: #edeced;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -61,8 +61,8 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  color: #f6dd77    ;
-  background: #f6dd77;
+  color: rgba(#ffcc00, 0.36);
+  background: rgba(#ffcc00, 0.36);
 }
 
 .sidebar-nav li {
@@ -74,13 +74,13 @@ body {
   display: block;
   text-decoration: none;
   color: #000;
-  background: #f6dd77;
+  background: #ffcc0050;
 }
 
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #fff;
-  background: rgb(255, 210, 75);
+  background: #ffcc00ff;
 }
 
 .sidebar-nav li a:active, .sidebar-nav li a:focus {
@@ -96,12 +96,12 @@ body {
 
 .sidebar-nav>.sidebar-brand a {
   color: #000000;
-  background: rgb(255, 210, 75);
+  background: #ffcc00;
 }
 
 .sidebar-nav>.sidebar-brand a:hover {
   color: #000000;
-  background: rgb(255, 210, 75);
+  background: #ffcc00;
 }
 
 @media(min-width:768px) {

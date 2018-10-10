@@ -52,13 +52,26 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
-                <a href="#menu-toggle" class="btn btn-yellow " id="menu-toggle">Toggle Menu</a>
+
                 <!-- <h1>Session monitor</h1> -->
                 <div class="row">
-                    <div class='col-2'>
-                        <p>Placeholder</p>
+                    <div class='col-lg-2 col-sm-12'>
+                        <h2>Session statistics</h2>
+                        <h3>Name:</h3>
+                        <p>{{sessions[-1]['session_name']}}</p>
+                        <h3>Begin time</h3>
+                        <p>{{sessions[-1]['begin_time']}}</p>
+                        <h3>End time</h3>
+                        <p>{{sessions[-1]['end_time']}}</p>
+                        <h3>Type of session</h3>
+                        <p>{{sessions[-1]['type']}}</p>
+                        <h3>Last temperature</h3>
+                        <p>5 graden</p>
+
+                        <a href="#menu-toggle" class="btn btn-yellow " id="menu-toggle">Toggle Menu</a>
+
                     </div>
-                    <div class='col-10'>
+                    <div class='col-lg-10 col-sm-12'>
                         <canvas id="monitor"></canvas>
                     </div>
                 </div>
@@ -95,8 +108,8 @@
                     var dev_id;
                     var found;
                     var danger_list = [];
-                    for (var i = 0; i < response['sensors'].length; i++) {
-                        dev_id = response['sensors'][i]['dev_id'];
+                    for (var i = 0; i < response['sessions'].length; i++) {
+                        dev_id = response['sessions'][i]['id'];
                         found = false;
                         chart.data.datasets.forEach(function (dataset) {
                             if (dataset.identifier == dev_id) {
@@ -106,7 +119,7 @@
                         })
                         if (!found) {
                             chart.data.datasets.push({
-                                label: response['sensors'][i]['sensorname'],
+                                label: response['sessions'][i]['session_name'],
                                 data: response['temperature'][dev_id],
                                 borderColor: '#ffcc00',
                                 pointBorderColor: '#ffcc00',
