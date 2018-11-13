@@ -23,7 +23,7 @@ CREATE TABLE session (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_name TEXT UNIQUE NOT NULL,
     begin_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    end_time TIMESTAMP,
+    end_time TEXT,
     type TEXT NOT NULL,
     color TEXT,
     sensor_id INTEGER NOT NULL,

@@ -124,7 +124,7 @@ def get_data():
         results = c.execute(
             'SELECT water, date_tx'
             ' FROM status s JOIN plant p on s.plant_id = p.id'
-            ' WHERE dev_id = ? AND date_tx >= ?'
+            ' WHERE dev_id = ?'  # ' AND date_tx >= ?'
             ' ORDER BY date_tx ASC', (plant['dev_id'], day_offset,)).fetchall()
         water[plant['dev_id']] = [dict([('x', (
                 datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=2)).strftime(

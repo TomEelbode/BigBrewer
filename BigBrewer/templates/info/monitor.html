@@ -35,13 +35,13 @@
                     <h3>Session monitor</h3>
                 </div> -->
                 <li class="sidebar-brand">
-                    <a href="#">
+                    <a href="">
                         Session monitor
                     </a>
                 </li>
                 {% for session in sessions %}
                 <li>
-                    <a href="#">{{session['session_name']}}</a>
+                    <a href="/monitor/{{session['id']}}">{{session['session_name']}}</a>
                 </li>
                 {% endfor %}
 
@@ -58,16 +58,17 @@
                     <div class='col-lg-2 col-sm-12'>
                         <h2>Session statistics</h2>
                         <h3>Name:</h3>
-                        <p>{{sessions[-1]['session_name']}}</p>
+                        <p>{{sessions[selected_session]['session_name']}}</p>
                         <h3>Begin time</h3>
-                        <p>{{sessions[-1]['begin_time']}}</p>
+                        <p>{{sessions[selected_session]['begin_time']}}</p>
                         <h3>End time</h3>
-                        <p>{{sessions[-1]['end_time']}}</p>
+                        <p>{{sessions[selected_session]['end_time']}}</p>
                         <h3>Type of session</h3>
-                        <p>{{sessions[-1]['type']}}</p>
-                        <h3>Last temperature</h3>
-                        <p>5 graden</p>
-
+                        <p>{{sessions[selected_session]['type']}}</p>
+                        <h3>Current temperature</h3>
+                        <font size="7" id="current_temperature"></font>
+                        <font size="7">&deg;C</font>
+                        <br>
                         <a href="#menu-toggle" class="btn btn-yellow " id="menu-toggle">Toggle Menu</a>
 
                     </div>
@@ -108,26 +109,26 @@
                     var dev_id;
                     var found;
                     var danger_list = [];
-                    for (var i = 0; i < response['sessions'].length; i++) {
-                        dev_id = response['sessions'][i]['id'];
-                        found = false;
-                        chart.data.datasets.forEach(function (dataset) {
-                            if (dataset.identifier == dev_id) {
-                                dataset.data = response['temperature'][dev_id];
-                                found = true;
-                            }
-                        })
-                        if (!found) {
-                            chart.data.datasets.push({
-                                label: response['sessions'][i]['session_name'],
-                                data: response['temperature'][dev_id],
-                                borderColor: '#ffcc00',
-                                pointBorderColor: '#ffcc00',
-                                backgroundColor: '#ffcc0050',
-                                identifier: dev_id,
-                            })
+                    // for (var i = 0; i < response['sessions'].length; i++) {
+                    dev_id = response['sessions'][{{selected_session}}]['id'];
+                    found = false;
+                    chart.data.datasets.forEach(function (dataset) {
+                        if (dataset.identifier == dev_id) {
+                            dataset.data = response['temperature'][dev_id];
+                            found = true;
                         }
+                    })
+                    if (!found) {
+                        chart.data.datasets.push({
+                            label: response['sessions'][{{selected_session}}]['session_name'],
+                            data: response['temperature'][dev_id],
+                            borderColor: '#ffcc00',
+                            pointBorderColor: '#ffcc00',
+                            backgroundColor: '#ffcc0050',
+                            identifier: dev_id,
+                        })
                     }
+                    // }
                     chart.update();
                 },
                 error: function (xhr) {
@@ -149,18 +150,20 @@
             options: {
                 responsive: true,
                 legend: {
-                    display: true,
+                    display: false,
                     position: 'bottom'
                 },
                 scales: {
                     xAxes: [
                         {
                             type: 'time',
+                            distribution: 'linear',
                             display: true,
                             time: {
-                                unit : 'day',
+                                unit : 'hour',
+                                unitStepSize: 6,
                                 displayFormats: {
-                                    day: 'MMM, ddd D'
+                                    hour: 'MMM D, H:mm'
                                 }
                             }
                         }
@@ -182,8 +185,36 @@
                 }
             }
         });
+
         getData()
         setInterval(getData,10000)
+
+        var ctr = document.getElementById('current_temperature');
+        function updateTemperature() {
+            $.ajax({
+                url: '{{ url_for('temperature.current_temperature') }}',
+                type: "get",
+                data: {jsdata: 'data'},
+                success: function (response) {
+                    ctr.innerHTML = response['current_temp'][{{sessions[selected_session]['id']}}]
+                },
+                error: function (xhr) {
+                    alert('Failed from timeout');
+                }
+                ,
+                timeout: 5000
+            });
+           // ctr.innerHTML = x;
+           // if (x++ < max)
+               // setTimeout(updateTemperature, 100);
+        }
+
+        updateTemperature();
+        setInterval(updateTemperature,1000)
+
+
+
+
     </script>
 
 {% endblock %}

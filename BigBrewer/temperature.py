@@ -136,7 +136,7 @@ def createsession():
             print("Stopping other session that used the same sensor")
             db.execute(
                 'UPDATE session SET end_time = ? WHERE id = ?',
-                (timestamp, current_session,)
+                (timestamp, current_session[0],)
             )
 
         if error is None:
@@ -159,6 +159,7 @@ def createsession():
     return render_template('temperature/session.html', sensors=sensors)
 
 
+# @bp.route('/data', defaults={'session' : None}, methods=['GET'])
 @bp.route('/data', methods=['GET'])
 def get_data():
     db = get_db()
@@ -166,6 +167,7 @@ def get_data():
     sessions = c.execute(
         'SELECT id, session_name'
         ' FROM session'
+        ' ORDER BY id DESC'
     ).fetchall()
     sessions = [dict(zip([key[0] for key in c.description], row)) for row in sessions]
 
@@ -193,7 +195,30 @@ def get_data():
             ' ORDER BY date_tx ASC', (session['id'], day_offset, )).fetchall()
         # print(results)
         temperature[session['id']] = [dict([('x', (
-                datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=0)).strftime(
+                datetime.strptime(row['date_tx'], '%Y-%m-%d %H:%M:%S') + timedelta(hours=1)).strftime(
             '%Y-%m-%d %H:%M:%S')), ('y', row['temperature'])]) for row in results]
 
     return jsonify(temperature=temperature, sessions=sessions)
+
+
+@bp.route('/current_temperature', methods=['GET'])
+def current_temperature():
+    db = get_db()
+    c = db.cursor()
+    sessions = c.execute(
+        'SELECT id, session_name'
+        ' FROM session'
+        ' ORDER BY id DESC'
+    ).fetchall()
+    sessions = [dict(zip([key[0] for key in c.description], row)) for row in sessions]
+
+    # print('GETTING CURRENT TEMP')
+    current_temp = dict()
+    for session in sessions:
+        temp = c.execute(
+            'SELECT temperature '
+            'FROM status s JOIN session p on s.session_id = p.id'
+            ' WHERE session_id = ?'
+            ' ORDER BY date_tx DESC', (session['id'], )).fetchone()
+        current_temp[session['id']] = temp[0]
+    return jsonify(current_temp=current_temp)

@@ -13,8 +13,9 @@ def index():
     return render_template('info/index.html')
 
 
-@bp.route('/monitor')
-def monitor():
+@bp.route('/monitor', defaults={'session': None})
+@bp.route('/monitor/<session>')
+def monitor(session):
     db = get_db()
     sessions = db.execute(
             'SELECT id, session_name, sensor_id, color, begin_time, end_time, type'
@@ -22,7 +23,15 @@ def monitor():
             ' ORDER BY id DESC'
         ).fetchall()
 
-    return render_template('info/monitor.html', sessions=sessions)
+    selected_session = 0
+    if session is not None:
+        for i in range(len(sessions)):
+            if sessions[i]['id'] == int(session):
+                selected_session = i
+
+    return render_template('info/monitor.html',
+                           sessions=sessions,
+                           selected_session=selected_session)
 
 
 # @bp.route('/plants', methods=['GET', 'POST'])
